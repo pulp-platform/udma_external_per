@@ -20,15 +20,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-`define REG_RX_SADDR            5'b00000 //BASEADDR+0x00
-`define REG_RX_SIZE             5'b00001 //BASEADDR+0x04
-`define REG_RX_CFG              5'b00010 //BASEADDR+0x08
-`define REG_RX_INTCFG           5'b00011 //BASEADDR+0x0C
+`define REG_RX_SADDR                   5'b00000 //BASEADDR+0x00
+`define REG_RX_SIZE                    5'b00001 //BASEADDR+0x04
+`define REG_RX_CFG                     5'b00010 //BASEADDR+0x08
+`define REG_RX_INTCFG                  5'b00011 //BASEADDR+0x0C
 
-`define REG_TX_SADDR            5'b00100 //BASEADDR+0x10
-`define REG_TX_SIZE             5'b00101 //BASEADDR+0x14
-`define REG_TX_CFG              5'b00110 //BASEADDR+0x18
-`define REG_TX_INTCFG           5'b00111 //BASEADDR+0x1C
+`define REG_TX_SADDR                   5'b00100 //BASEADDR+0x10
+`define REG_TX_SIZE                    5'b00101 //BASEADDR+0x14
+`define REG_TX_CFG                     5'b00110 //BASEADDR+0x18
+`define REG_TX_INTCFG                  5'b00111 //BASEADDR+0x1C
 
 `define REG_EXTERNAL_PER_SETUP_INSIDE  5'b01000 //BASEADDR+0x20
 `define REG_EXTERNAL_PER_SETUP         5'b01001 //BASEADDR+0x24
@@ -50,7 +50,7 @@ module udma_external_per_reg_if #(
     output logic [L2_AWIDTH_NOAL-1:0] cfg_rx_startaddr_o,
     output logic     [TRANS_SIZE-1:0] cfg_rx_size_o,
     output logic                      cfg_rx_continuous_o,
-    output logic                [1:0] cfg_rx_datasize_o,
+    output logic                [1:0] data_rx_datasize_o,
     output logic                      cfg_rx_en_o,
     output logic                      cfg_rx_clr_o,
     input  logic                      cfg_rx_en_i,
@@ -60,7 +60,7 @@ module udma_external_per_reg_if #(
 
     output logic [L2_AWIDTH_NOAL-1:0] cfg_tx_startaddr_o,
     output logic     [TRANS_SIZE-1:0] cfg_tx_size_o,
-    output logic                [1:0] cfg_tx_datasize_o,
+    output logic                [1:0] data_tx_datasize_o,
     output logic                      cfg_tx_continuous_o,
     output logic                      cfg_tx_en_o,
     output logic                      cfg_tx_clr_o,
@@ -68,22 +68,26 @@ module udma_external_per_reg_if #(
     input  logic                      cfg_tx_pending_i,
     input  logic [L2_AWIDTH_NOAL-1:0] cfg_tx_curr_addr_i,
     input  logic     [TRANS_SIZE-1:0] cfg_tx_bytes_left_i,
-    input  logic               [31:0] external_per_setup_i
+    input  logic               [31:0] external_per_setup_i,
+    output logic               [31:0] external_per_setup_o
+
 );
 
     logic [L2_AWIDTH_NOAL-1:0] r_rx_startaddr;
     logic   [TRANS_SIZE-1 : 0] r_rx_size;
     logic                      r_rx_continuous;
+    logic              [1 : 0] r_rx_datasize;
     logic                      r_rx_en;
     logic                      r_rx_clr;
 
     logic [L2_AWIDTH_NOAL-1:0] r_tx_startaddr;
     logic   [TRANS_SIZE-1 : 0] r_tx_size;
     logic                      r_tx_continuous;
+    logic              [1 : 0] r_tx_datasize;
     logic                      r_tx_en;
     logic                      r_tx_clr;
 
-    logic               [31:0] r_ext_per_setup
+    logic               [31:0] r_ext_per_setup;
     logic                [4:0] s_wr_addr;
     logic                [4:0] s_rd_addr;
 
@@ -95,14 +99,14 @@ module udma_external_per_reg_if #(
     assign cfg_rx_continuous_o = r_rx_continuous;
     assign cfg_rx_en_o         = r_rx_en;
     assign cfg_rx_clr_o        = r_rx_clr;
-    assign cfg_rx_datasize_o   = r_rx_datasize;
+    assign data_rx_datasize_o  = r_rx_datasize;
 
     assign cfg_tx_startaddr_o  = r_tx_startaddr;
     assign cfg_tx_size_o       = r_tx_size;
     assign cfg_tx_continuous_o = r_tx_continuous;
     assign cfg_tx_en_o         = r_tx_en;
     assign cfg_tx_clr_o        = r_tx_clr;
-    assign cfg_tx_datasize_o   = r_tx_datasize;
+    assign data_tx_datasize_o  = r_tx_datasize;
 
 
     always_ff @(posedge clk_i, negedge rstn_i)
@@ -166,10 +170,11 @@ module udma_external_per_reg_if #(
         end
     end //always
 
+    assign external_per_setup_o = r_ext_per_setup;
+
     always_comb
     begin
         cfg_data_o = 32'h0;
-        err_clr_o = 1'b0;
         case (s_rd_addr)
         `REG_RX_SADDR:
             cfg_data_o = cfg_rx_curr_addr_i;

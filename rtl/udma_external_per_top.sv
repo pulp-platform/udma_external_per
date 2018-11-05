@@ -36,7 +36,6 @@ module udma_external_per_top #(
 
     output logic [L2_AWIDTH_NOAL-1:0] cfg_rx_startaddr_o,
     output logic     [TRANS_SIZE-1:0] cfg_rx_size_o,
-    output logic                [1:0] cfg_rx_datasize_o,
     output logic                      cfg_rx_continuous_o,
     output logic                      cfg_rx_en_o,
     output logic                      cfg_rx_clr_o,
@@ -47,7 +46,6 @@ module udma_external_per_top #(
 
     output logic [L2_AWIDTH_NOAL-1:0] cfg_tx_startaddr_o,
     output logic     [TRANS_SIZE-1:0] cfg_tx_size_o,
-    output logic                [1:0] cfg_tx_datasize_o,
     output logic                      cfg_tx_continuous_o,
     output logic                      cfg_tx_en_o,
     output logic                      cfg_tx_clr_o,
@@ -69,6 +67,7 @@ module udma_external_per_top #(
     input  logic                      data_rx_ready_i,
 
     input  logic               [31:0] external_per_setup_i,
+    output logic               [31:0] external_per_setup_o,
 
     //TX side - uDMA <-> external Peripheral
     output logic                      data_tx_dc_valid_o,
@@ -118,7 +117,7 @@ module udma_external_per_top #(
         .cfg_rx_startaddr_o ( cfg_rx_startaddr_o  ),
         .cfg_rx_size_o      ( cfg_rx_size_o       ),
         .cfg_rx_continuous_o( cfg_rx_continuous_o ),
-        .cfg_rx_datasize_o  ( cfg_rx_datasize_o   ),
+        .data_rx_datasize_o ( data_rx_datasize_o  ),
         .cfg_rx_en_o        ( cfg_rx_en_o         ),
         .cfg_rx_clr_o       ( cfg_rx_clr_o        ),
         .cfg_rx_en_i        ( cfg_rx_en_i         ),
@@ -129,7 +128,7 @@ module udma_external_per_top #(
         .cfg_tx_startaddr_o ( cfg_tx_startaddr_o  ),
         .cfg_tx_size_o      ( cfg_tx_size_o       ),
         .cfg_tx_continuous_o( cfg_tx_continuous_o ),
-        .cfg_tx_datasize_o  ( cfg_tx_datasize_o   ),
+        .data_tx_datasize_o ( data_tx_datasize_o  ),
         .cfg_tx_en_o        ( cfg_tx_en_o         ),
         .cfg_tx_clr_o       ( cfg_tx_clr_o        ),
         .cfg_tx_en_i        ( cfg_tx_en_i         ),
@@ -137,7 +136,8 @@ module udma_external_per_top #(
         .cfg_tx_curr_addr_i ( cfg_tx_curr_addr_i  ),
         .cfg_tx_bytes_left_i( cfg_tx_bytes_left_i ),
 
-        .external_per_setup_i ( external_per_setup_i )
+        .external_per_setup_i ( external_per_setup_i ),
+        .external_per_setup_o ( external_per_setup_o )
     );
 
     io_tx_fifo #(
