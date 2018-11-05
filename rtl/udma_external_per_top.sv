@@ -171,7 +171,7 @@ module udma_external_per_top #(
         .dst_ready_i  ( data_tx_dc_ready_i )
     );
 
-    udma_dc_fifo #(8,4) u_dc_fifo_rx
+    udma_dc_fifo #(32,4) u_dc_fifo_rx
     (
         .src_clk_i    ( periph_clk_i       ),
         .src_rstn_i   ( rstn_i             ),
