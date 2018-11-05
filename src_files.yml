@@ -1,0 +1,6 @@
+udma_external_per:
+  files: [
+    rtl/udma_external_per_reg_if.sv,
+    rtl/udma_external_per_top.sv,
+  ]
+
