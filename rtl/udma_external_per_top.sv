@@ -83,7 +83,7 @@ module udma_external_per_top #(
 
     logic         s_data_tx_valid;
     logic         s_data_tx_ready;
-    logic   [7:0] s_data_tx;
+    logic   [31:0] s_data_tx;
 
 
     //udma_uart_tx u_uart_tx(
