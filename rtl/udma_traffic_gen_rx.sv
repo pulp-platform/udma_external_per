@@ -75,7 +75,7 @@ module udma_traffic_gen_rx (
                  if(rx_ready_i) begin
                      reg_data_next  = reg_data + 1;
                      reg_count_next = reg_count + 1;
-                     if (reg_count == s_target_word)
+                     if (reg_count == s_target_word - 1)
                      begin
                          reg_count_next = '0;
                          NS             = WAIT_CLEAR;
