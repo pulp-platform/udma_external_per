@@ -28,7 +28,7 @@ module udma_traffic_gen_rx (
      input  logic            rx_ready_i
 );
 
-    enum logic [1:0] {IDLE,GENERATE_DATA,SAVE_DATA} CS,NS;
+    enum logic [1:0] {IDLE, GENERATE_DATA, WAIT_CLEAR} CS,NS;
 
     logic [31:0] reg_data;
     logic [31:0] reg_data_next;
@@ -44,7 +44,7 @@ module udma_traffic_gen_rx (
 
     logic       sampleData;
 
-    assign busy_o = (CS != IDLE);
+    assign busy_o = (CS == GENERATE_DATA);
     assign cfg_en = cfg_setup_i[0];
 
     assign s_target_word = cfg_setup_i[15:8];
@@ -71,18 +71,21 @@ module udma_traffic_gen_rx (
 
             GENERATE_DATA:
             begin
-                 reg_data_next = reg_data + 1;
-                 if (reg_count == s_target_word)
-                 begin
-                     reg_count_next = '0;
-                     NS             = SAVE_DATA;
+                 rx_valid_o = 1'b1;
+                 if(rx_ready_i) begin
+                     reg_data_next  = reg_data + 1;
+                     reg_count_next = reg_count + 1;
+                     if (reg_count == s_target_word)
+                     begin
+                         reg_count_next = '0;
+                         NS             = WAIT_CLEAR;
+                     end
                  end
             end
 
-            SAVE_DATA:
+            WAIT_CLEAR:
             begin
-                rx_valid_o = 1'b1;
-                if(rx_ready_i)
+                if(~cfg_en)
                     NS = IDLE;
             end
 
