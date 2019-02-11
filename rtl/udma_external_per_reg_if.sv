@@ -30,7 +30,7 @@
 `define REG_TX_CFG                     5'b00110 //BASEADDR+0x18
 `define REG_TX_INTCFG                  5'b00111 //BASEADDR+0x1C
 
-`define REG_EXTERNAL_PER_SETUP_INSIDE  5'b01000 //BASEADDR+0x20
+`define REG_EXTERNAL_PER_STATUS        5'b01000 //BASEADDR+0x20
 `define REG_EXTERNAL_PER_SETUP         5'b01001 //BASEADDR+0x24
 
 module udma_external_per_reg_if #(
@@ -68,7 +68,7 @@ module udma_external_per_reg_if #(
     input  logic                      cfg_tx_pending_i,
     input  logic [L2_AWIDTH_NOAL-1:0] cfg_tx_curr_addr_i,
     input  logic     [TRANS_SIZE-1:0] cfg_tx_bytes_left_i,
-    input  logic               [31:0] external_per_setup_i,
+    input  logic               [31:0] external_per_status_i,
     output logic               [31:0] external_per_setup_o
 
 );
@@ -188,8 +188,8 @@ module udma_external_per_reg_if #(
             cfg_data_o[TRANS_SIZE-1:0] = cfg_tx_bytes_left_i;
         `REG_TX_CFG:
             cfg_data_o = {26'h0,cfg_tx_pending_i,cfg_tx_en_i,3'h0,r_tx_continuous};
-        `REG_EXTERNAL_PER_SETUP_INSIDE:
-            cfg_data_o = external_per_setup_i;
+        `REG_EXTERNAL_PER_STATUS:
+            cfg_data_o = external_per_status_i;
         `REG_EXTERNAL_PER_SETUP:
             cfg_data_o = r_ext_per_setup;
          default:

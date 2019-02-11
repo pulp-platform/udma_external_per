@@ -66,7 +66,7 @@ module udma_external_per_top #(
     output logic                      data_rx_valid_o,
     input  logic                      data_rx_ready_i,
 
-    input  logic               [31:0] external_per_setup_i,
+    input  logic               [31:0] external_per_status_i,
     output logic               [31:0] external_per_setup_o,
 
     //TX side - uDMA <-> external Peripheral
@@ -136,8 +136,8 @@ module udma_external_per_top #(
         .cfg_tx_curr_addr_i ( cfg_tx_curr_addr_i  ),
         .cfg_tx_bytes_left_i( cfg_tx_bytes_left_i ),
 
-        .external_per_setup_i ( external_per_setup_i ),
-        .external_per_setup_o ( external_per_setup_o )
+        .external_per_status_i ( external_per_status_i ),
+        .external_per_setup_o  ( external_per_setup_o  )
     );
 
     io_tx_fifo #(
