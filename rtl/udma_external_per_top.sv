@@ -86,20 +86,6 @@ module udma_external_per_top #(
     logic   [31:0] s_data_tx;
 
 
-    //udma_uart_tx u_uart_tx(
-    //    .clk_i           ( periph_clk_i       ),
-    //    .tx_data_i       ( data_tx_dc_o       ),
-    //    .tx_valid_i      ( data_tx_dc_valid_o ),
-    //    .tx_ready_o      ( data_tx_dc_ready_i )
-    //);
-
-    //udma_uart_rx u_uart_rx(
-    //    .clk_i           ( periph_clk_i       ),
-    //    .rx_data_o       ( data_rx_dc_i       ),
-    //    .rx_valid_o      ( data_rx_dc_valid_i ),
-    //    .rx_ready_i      ( data_rx_dc_ready_o )
-    //);
-
     udma_external_per_reg_if #(
         .L2_AWIDTH_NOAL(L2_AWIDTH_NOAL),
         .TRANS_SIZE(TRANS_SIZE)

@@ -47,8 +47,8 @@ module udma_traffic_gen_rx (
     assign busy_o = (CS == GENERATE_DATA);
     assign cfg_en = cfg_setup_i[0];
 
-    assign s_target_word = cfg_setup_i[15:8];
-    assign initial_value = cfg_setup_i[31:16];
+    assign s_target_word = 0; //COMPLETE THE CODE HERE
+    assign initial_value = 0; //COMPLETE THE CODE HERE
 
      always_comb
      begin
@@ -71,16 +71,7 @@ module udma_traffic_gen_rx (
 
             GENERATE_DATA:
             begin
-                 rx_valid_o = 1'b1;
-                 if(rx_ready_i) begin
-                     reg_data_next  = reg_data + 1;
-                     reg_count_next = reg_count + 1;
-                     if (reg_count == s_target_word - 1)
-                     begin
-                         reg_count_next = '0;
-                         NS             = WAIT_CLEAR;
-                     end
-                 end
+                /*USE HERE THE VALID AND READY SIGNAL TO NOTIFY A NEW DATA*/
             end
 
             WAIT_CLEAR:

@@ -101,7 +101,7 @@ module udma_external_per_wrapper #(
         .*
     );
 
-
+`ifdef PULP_TRAINING
     udma_traffic_gen_tx u_traffic_gen_tx (
         .clk_i           ( periph_clk_i     ),
         .rstn_i          ( rstn_i           ),
@@ -122,7 +122,7 @@ module udma_external_per_wrapper #(
         .rx_ready_i      ( data_rx_dc_ready ),
         .cfg_setup_i     ( cfg_setup        )
     );
-
+`endif
 
 
 endmodule // udma_uart_top
