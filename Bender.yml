@@ -1,0 +1,15 @@
+package: 
+  name: udma_external_per
+  authors: 
+    - "Pasquale Davide Schiavone <pschiavo@iis.ee.ethz.ch>"
+
+
+dependencies:
+  udma_core: {path: "../udma_core"}
+
+sources:
+  - rtl/udma_external_per_reg_if.sv
+  - rtl/udma_external_per_wrapper.sv
+  - rtl/udma_external_per_top.sv
+  - rtl/udma_traffic_gen_rx.sv
+  - rtl/udma_traffic_gen_tx.sv
